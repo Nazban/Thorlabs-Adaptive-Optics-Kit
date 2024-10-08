@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <link rel="stylesheet" href="htmlhelp.css" type="text/css">
+    <title>TLDFMX_calculate_zernike_pattern</title>
+  </head>
+  <body>
+    <h1>TLDFMX_calculate_zernike_pattern</h1>
+    <p class="syntax">
+      ViStatus TLDFMX_calculate_zernike_pattern (ViSession instrumentHandle,
+                                           ViUInt32 zernikes,
+                                           ViReal64 _VI_FAR zernikeAmplitudes[],
+                                           ViReal64 _VI_FAR mirrorPattern[]);
+    </p>
+    <h2 class="purpose">Purpose</h2>
+    <p class="body">
+    This function calculates a mirror voltage pattern according to multiple desired 'Zernike Amplitudes' in order to achieve the specified Zernike shapes.
+    <br/>
+    In addition, some or all segment voltages may be shifted in order to meet earlier requests by functions TLDFMX_set_single_voltage_setpoint or TLDFMX_set_voltages_setpoint.
+    <br/>
+    The goal is to manage user requests for setting a certain Zernike pattern AND at the same time fulfill requests to set one or more segments to a defined voltage.
+    <br/>
+    Both demands can be met by
+    <br/>
+    - Calling TLDFMX_calculate_single_zernike_pattern or TLDFMX_calculate_zernike_pattern to set new Zernke amplitudes. All segments may change its voltage at once.
+    <br/>
+    - Calling TLDFMX_set_single_voltage_setpoint or TLDFMX_set_voltages_setpoint to define segment voltages under consideration of already present Zernike pattern. Subsequently, function TLDFMX_calculate_single_zernike_pattern or TLDFMX_calculate_zernike_pattern needs to be called to get the combined pattern.
+    <br/>
+    Note:
+    <br/>
+    The returned mirror pattern have to be set separately to the physical device by using TLDFM base driver functions like TLDFM_set_segment_voltages.
+    </p>
+    <h2>Parameters</h2>
+    <table class="borderless" summary="Parameter help">
+      <tr>
+        <td valign="top"><em class="label">Input</em></td>
+      </tr>
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">instrumentHandle</td>
+        <td class="paramDataType">ViSession</td>
+        <td>
+    This parameter accepts the Instrument Handle returned by the Initialize function to select the desired instrument driver session.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">zernikes</td>
+        <td class="paramDataType">ViUInt32</td>
+        <td>
+    This parameter determines the Zernike terms which should be calculated. It accepts a bitfield of type TLDFMX_zernike_flag_t.
+    <br/>
+    Available bitfields:
+    <br/>
+    Z_Ast45_Flag = 0x00000001, // Z4&nbsp;&nbsp;&nbsp;
+    <br/>
+    Z_Def_Flag&nbsp;&nbsp;&nbsp;= 0x00000002, // Z5&nbsp;&nbsp;&nbsp;
+    <br/>
+    Z_Ast0_Flag&nbsp;&nbsp;= 0x00000004, // Z6&nbsp;&nbsp;&nbsp;
+    <br/>
+    Z_TreY_Flag&nbsp;&nbsp;= 0x00000008, // Z7&nbsp;&nbsp;&nbsp;
+    <br/>
+    Z_ComX_Flag&nbsp;&nbsp;= 0x00000010, // Z8&nbsp;&nbsp;&nbsp;
+    <br/>
+    Z_ComY_Flag&nbsp;&nbsp;= 0x00000020, // Z9&nbsp;&nbsp;&nbsp;
+    <br/>
+    Z_TreX_Flag&nbsp;&nbsp;= 0x00000040, // Z10&nbsp;&nbsp;
+    <br/>
+    Z_TetY_Flag&nbsp;&nbsp;= 0x00000080, // Z11&nbsp;&nbsp;
+    <br/>
+    Z_SAstY_Flag = 0x00000100, // Z12&nbsp;&nbsp;
+    <br/>
+    Z_SAb3_Flag&nbsp;&nbsp;= 0x00000200, // Z13&nbsp;&nbsp;
+    <br/>
+    Z_SAstX_Flag = 0x00000400, // Z14&nbsp;&nbsp;
+    <br/>
+    Z_TetX_Flag&nbsp;&nbsp;= 0x00000800, // Z15&nbsp;&nbsp;
+    <br/>
+    Z_None_Flag&nbsp;&nbsp;= 0x00000000, // no Zernike
+    <br/>
+    Z_All_Flag&nbsp;&nbsp;&nbsp;= 0xFFFFFFFF&nbsp;&nbsp;// all Zernike Z4 to Z15
+    <br/>
+    Any combination of single bits can be selected by logical 'or' statements.
+    <br/>
+    e.g. Z_Ast45_Flag | Z_Def_Flag | Z_Ast0_Flag // selects Z4, Z5 and Z6
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">zernikeAmplitudes</td>
+        <td class="paramDataType">ViReal64[]</td>
+        <td>
+    This array contains the desired relative Zernike amplitudes (-1.0 ... +1.0) for the selected 'Zernikes'.
+    <br/>
+    Note:
+    <br/>
+    (1) The array needs to contain at least TLDFMX_MAX_ZERNIKE_TERMS (12) ViReal64 (double) elements. Meaningful (zero-based) indices range from
+    <br/>
+    [TLDFMX_Z4_AMPL_POS] or [0] for Z4 to
+    <br/>
+    [TLDFMX_Z15_AMPL_POS] or [11] for Z15.
+    <br/>
+    The array can be defined and filled as follows:
+    <br/>
+    ViReal64 array[TLDFMX_MAX_ZERNIKE_TERMS] = { 0.0 };
+    <br/>
+    array[TLDFMX_Z4_AMPL_POS] = 0.241;
+    <br/>
+    array[TLDFMX_Z7_AMPL_POS] = 0.5;
+    <br/>
+    array[TLDFMX_Z10_AMPL_POS] = -0.036;
+    <br/>
+    (2) For the allowed amplitude range and amplitudes array size call function TLDFMX_get_parameters.
+        </td>
+      </tr>
+      <tr>
+        <td valign="top"><em class="label">Output</em></td>
+      </tr>
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">mirrorPattern</td>
+        <td class="paramDataType">ViReal64[]</td>
+        <td>
+    This parameter returns the calculated array of segment voltages corresponding to the desired 'Zernike Amplitudes' AND takes into account voltage shifts to meet earlier requests by functions TLDFMX_set_single_voltage_setpoint or TLDFMX_set_voltages_setpoint.
+    <br/>
+    Note:
+    <br/>
+    (1) The returned mirror pattern have to be set separately to the physical device by using TLDFM base driver functions like TLDFM_set_segment_voltages.
+    <br/>
+    (2) This pattern is already limited to the allowed voltage range if range check is enabled by function TLDFMX_set_pattern_range_check. Range check is enabled by default.
+        </td>
+      </tr>
+    </table>
+    <h2>Return Value</h2>
+    <table class="borderless" summary="Return value help">
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">status</td>
+        <td class="paramDataType">ViStatus</td>
+        <td>
+    Operational return status. Contains either a completion code or an error code. Instrument driver specific codes that may be returned in addition to the VISA error codes defined in VPP-4.3 and vendor specific codes, are as follows.
+    <br/>
+    Completition Codes
+    <br/>
+    ----------------------------------------------------------------
+    <br/>
+    VI_SUCCESS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calculation successful, Pattern is usable
+    <br/>
+    Vendor Specific Codes
+    <br/>
+    ----------------------------------------------------------------
+    <br/>
+    For error codes and descriptions see &lt;Error Message&gt;.
+        </td>
+      </tr>
+    </table>
+    <h2>References</h2>
+    <p class="body">
+      <a href="ClassConfiguration%20Functions.html">Configuration Functions</a><br/>
+      <a href="Thorlabs%20DFM%20Driver%20Extension.html">Thorlabs DFM Driver Extension</a><br/>
+      <a href="Alphabetical%20Function%20Index.html">Alphabetical Function Index</a><br/>
+      <a href="Hierarchical%20Function%20Index.html">Hierarchical Function Index</a><br/>
+    </p>
+  </body>
+</html>

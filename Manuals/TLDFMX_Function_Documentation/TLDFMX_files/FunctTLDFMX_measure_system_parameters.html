@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <link rel="stylesheet" href="htmlhelp.css" type="text/css">
+    <title>TLDFMX_measure_system_parameters</title>
+  </head>
+  <body>
+    <h1>TLDFMX_measure_system_parameters</h1>
+    <p class="syntax">
+      ViStatus TLDFMX_measure_system_parameters (ViSession instrumentHandle,
+                                           ViBoolean isFirstStep,
+                                           ViReal32 _VI_FAR measuredZernikeAmplitudes[],
+                                           ViPInt32 remainingSteps,
+                                           ViReal64 _VI_FAR nextMirrorPattern[]);
+    </p>
+    <h2 class="purpose">Purpose</h2>
+    <p class="body">
+    This function measures the properties of the optical setup between the Deformable Mirror and a Wavefront Sensor.
+    <br/>
+    Determined parameters are
+    <br/>
+    - the required rotation and flip option for the Zernike pattern
+    <br/>
+    - the maximum achievable Zernike amplitudes.
+    <br/>
+    A successful run of this function is a precondition to perform an adaptive optics control loop using function TLDFMX_get_flat_wavefront.
+    <br/>
+    The function needs to be called repeatedly within a loop until the 'Remaining Steps' parameter returns 0.
+    <br/>
+    This function just calculates and returns mirror test pattern which have to be set separately to the physical device by using TLDFM base driver functions like TLDFM_set_segment_voltages.
+    <br/>
+    The caller needs to commit the resulting Zernike amplitudes measured by a Wavefront Sensor during the next call to this function.
+    <br/>
+    After all measurement steps were performed without errors, the measured properties of the optical setup are returned by function TLDFMX_get_system_parameters.
+    <br/>
+    You need to call functions&nbsp;&nbsp;TLDFMX_set_rotation_mode and TLDFMX_set_flip_mode in order to set the required options active.
+    <br/>
+    Note:
+    <br/>
+    (1) Be sure you have the optical setup properly aligned and the beams are centered to the device apertures.
+    <br/>
+    (2) The pupil of the DMP40 (10 mm diameter) needs to be adapted to the pupil of the Wavefront Sensor by using optical lenses, mirrors or similar means.
+    <br/>
+    (3) You may need to program a short pause (for instance 5 ms) between setting the test voltage pattern to the device and requesting a new measurement result from the Wavefront Sensor in order to allow the DMP40 electronics and mechanics to settle.
+    <br/>
+    (4) Be sure to trigger a new Wavefront Sensor measurement and do not use old camera images taken before the new test pattern was applied.
+    </p>
+    <h2>Parameters</h2>
+    <table class="borderless" summary="Parameter help">
+      <tr>
+        <td valign="top"><em class="label">Input</em></td>
+      </tr>
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">instrumentHandle</td>
+        <td class="paramDataType">ViSession</td>
+        <td>
+    This parameter accepts the Instrument Handle returned by the Initialize function to select the desired instrument driver session.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">isFirstStep</td>
+        <td class="paramDataType">ViBoolean</td>
+        <td>
+    Set 'Is First Step' to 'VI_TRUE' for the first measurement step and to&nbsp;&nbsp;'VI_FALSE' for all following steps.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">measuredZernikeAmplitudes</td>
+        <td class="paramDataType">ViReal32[]</td>
+        <td>
+    This parameter accepts an array of Zernike amplitudes measured by a Wavefront Sensor in microns.
+    <br/>
+    Note: The array needs to contain at least 16 ViReal32 (float) elements. Meaningful indices range from [4] for Z4 to [15] for Z15.
+    <br/>
+    VI_NULL is only accepted for the first step ('Is First Step' = VI_TRUE)
+        </td>
+      </tr>
+      <tr>
+        <td valign="top"><em class="label">Output</em></td>
+      </tr>
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">remainingSteps</td>
+        <td class="paramDataType">ViInt32 (passed by reference)</td>
+        <td>
+    Returns a number denoting how often the function have to be called again.
+    <br/>
+    Note: If remaining steps equals 0 the function don't have to be called again.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">nextMirrorPattern</td>
+        <td class="paramDataType">ViReal64[]</td>
+        <td>
+    This parameter returns an array of mirror pattern which needs to be set separately by the user.
+    <br/>
+    Until the next call to this function the impact of this test pattern to the Zernike results of the Wavefront Sensor needs to be measured and returned in parameter 'Measured Zernike Amplitudes'.
+    <br/>
+    Note:
+    <br/>
+    (1) The returned mirror pattern have to be set separately to the physical device by using TLDFM base driver functions like TLDFM_set_segment_voltages.
+    <br/>
+    (2) This pattern is already limited to the allowed voltage range if range check is enabled by function TLDFMX_set_pattern_range_check. Range check is enabled by default.
+    <br/>
+    (3) You may need to program a short pause (for instance 5 ms) between setting the test voltage pattern to the device and requesting a new measurement result from the Wavefront Sensor in order to allow the DMP40 electronics and mechanics to settle.
+    <br/>
+    (4) Be sure to trigger a new Wavefront Sensor measurement and do not use old camera images taken before the new test pattern was applied.
+        </td>
+      </tr>
+    </table>
+    <h2>Return Value</h2>
+    <table class="borderless" summary="Return value help">
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">status</td>
+        <td class="paramDataType">ViStatus</td>
+        <td>
+    Operational return status. Contains either a completion code or an error code. Instrument driver specific codes that may be returned in addition to the VISA error codes defined in VPP-4.3 and vendor specific codes, are as follows.
+    <br/>
+    Completition Codes
+    <br/>
+    ----------------------------------------------------------------
+    <br/>
+    VI_SUCCESS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Revision query successful
+    <br/>
+    VI_WARN_NSUP_REV_QUERY&nbsp;&nbsp;&nbsp;Instrument revision query not supported
+    <br/>
+    Vendor Specific Codes
+    <br/>
+    ----------------------------------------------------------------
+    <br/>
+    For error codes and descriptions see &lt;Error Message&gt;.
+        </td>
+      </tr>
+    </table>
+    <h2>References</h2>
+    <p class="body">
+      <a href="ClassAction,Status%20Functions.html">Action/Status Functions</a><br/>
+      <a href="Thorlabs%20DFM%20Driver%20Extension.html">Thorlabs DFM Driver Extension</a><br/>
+      <a href="Alphabetical%20Function%20Index.html">Alphabetical Function Index</a><br/>
+      <a href="Hierarchical%20Function%20Index.html">Hierarchical Function Index</a><br/>
+    </p>
+  </body>
+</html>

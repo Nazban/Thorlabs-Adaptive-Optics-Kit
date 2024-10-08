@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <link rel="stylesheet" href="htmlhelp.css" type="text/css">
+    <title>TLDFM_set_USB_access_mode</title>
+  </head>
+  <body>
+    <h1>TLDFM_set_USB_access_mode</h1>
+    <p class="syntax">
+      ViStatus TLDFM_set_USB_access_mode (ViSession instrumentHandle,
+                                    ViUInt32 accessMode,
+                                    ViString requestedKey,
+                                    ViChar _VI_FAR accessKey[]);
+    </p>
+    <h2 class="purpose">Purpose</h2>
+    <p class="body">
+    This function is used to obtain a lock on the deformable mirror instrument. This operation can also be used for sharing and nesting locks.
+    </p>
+    <h2>Parameters</h2>
+    <table class="borderless" summary="Parameter help">
+      <tr>
+        <td valign="top"><em class="label">Input</em></td>
+      </tr>
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">instrumentHandle</td>
+        <td class="paramDataType">ViSession</td>
+      </tr>
+      <tr>
+        <td class="paramName">accessMode</td>
+        <td class="paramDataType">ViUInt32</td>
+        <td>
+    This parameter determines how the access to the instrument should be controlled.
+    <br/>
+    Available settings:
+    <br/>
+    0&nbsp;&nbsp;AM_No_Lock&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;free access for other instances
+    <br/>
+    1&nbsp;&nbsp;AM_Exclusive_Lock&nbsp;&nbsp;&nbsp;lock the device to the current instance
+    <br/>
+    2&nbsp;&nbsp;AM_Shared_Lock&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shared look with other instances
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">requestedKey</td>
+        <td class="paramDataType">ViString</td>
+        <td>
+    This string parameter specifies the requested key and is used only when requesting a shared lock.&nbsp;&nbsp;If the operation is successful, the key can be passed to other sessions for lock sharing. If not specified, VISA will generate a unique key.
+        </td>
+      </tr>
+      <tr>
+        <td valign="top"><em class="label">Output</em></td>
+      </tr>
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">accessKey</td>
+        <td class="paramDataType">ViChar[]</td>
+        <td>
+    The actual access key to the resource associated with the Instrument Handle session.&nbsp;&nbsp;Other sessions can pass this key as the RequestedKey to share the lock on the resource.
+    <br/>
+    If the lock being requested is an exclusive lock, this parameter can be VI_NULL.
+    <br/>
+    Note:&nbsp;&nbsp;String declaration size must be at least 256 bytes.
+        </td>
+      </tr>
+    </table>
+    <h2>Return Value</h2>
+    <table class="borderless" summary="Return value help">
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">status</td>
+        <td class="paramDataType">ViStatus</td>
+      </tr>
+    </table>
+    <h2>References</h2>
+    <p class="body">
+      <a href="ClassUtility%20Functions.html">Utility Functions</a><br/>
+      <a href="Thorlabs%20DFM%20Visa%20Instrument%20Driver.html">Thorlabs DFM Visa Instrument Driver</a><br/>
+      <a href="Alphabetical%20Function%20Index.html">Alphabetical Function Index</a><br/>
+      <a href="Hierarchical%20Function%20Index.html">Hierarchical Function Index</a><br/>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <link rel="stylesheet" href="htmlhelp.css" type="text/css">
+    <title>TLDFMX_get_pattern_range_check</title>
+  </head>
+  <body>
+    <h1>TLDFMX_get_pattern_range_check</h1>
+    <p class="syntax">
+      ViStatus TLDFMX_get_pattern_range_check (ViSession instrumentHandle,
+                                         ViPBoolean enabled);
+    </p>
+    <h2 class="purpose">Purpose</h2>
+    <p class="body">
+    This function returns the actual pattern range check setting.
+    <br/>
+    When enabled, the caller can be sure that all segment or arm voltages returned by TLDFMX functions are within the allowed range and can be directly set to the device by base driver functions like TLDFM_set_segment_voltages, TLDFM_set_tilt_voltages or TLDFM_set_voltages.
+    <br/>
+    Note: The range check is enabled by default.
+    </p>
+    <h2>Parameters</h2>
+    <table class="borderless" summary="Parameter help">
+      <tr>
+        <td valign="top"><em class="label">Input</em></td>
+      </tr>
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">instrumentHandle</td>
+        <td class="paramDataType">ViSession</td>
+        <td>
+    This parameter accepts the Instrument Handle returned by the Initialize function to select the desired instrument driver session.
+        </td>
+      </tr>
+      <tr>
+        <td valign="top"><em class="label">Output</em></td>
+      </tr>
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">enabled</td>
+        <td class="paramDataType">ViBoolean (passed by reference)</td>
+        <td>
+    This parameter returns the actual setting of the pattern range check.
+    <br/>
+    Available settings:
+    <br/>
+    VI_TRUE&nbsp;&nbsp;&nbsp;range check enabled (default)
+    <br/>
+    VI_FALSE&nbsp;&nbsp;range check disabled
+    <br/>
+    Note:
+    <br/>
+    When the voltage pattern range check is disabled, the caller is responsible for limiting the voltage pattern returned from TLDFMX functions to the allowed range before they can be set to the device by base driver functions like TLDFM_set_segment_voltages, TLDFM_set_tilt_voltages or TLDFM_set_voltages.
+        </td>
+      </tr>
+    </table>
+    <h2>Return Value</h2>
+    <table class="borderless" summary="Return value help">
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">status</td>
+        <td class="paramDataType">ViStatus</td>
+        <td>
+    Operational return status. Contains either a completion code or an error code. Instrument driver specific codes that may be returned in addition to the VISA error codes defined in VPP-4.3 and vendor specific codes, are as follows.
+    <br/>
+    Completition Codes
+    <br/>
+    ----------------------------------------------------------------
+    <br/>
+    VI_SUCCESS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get successful
+    <br/>
+    Vendor Specific Codes
+    <br/>
+    ----------------------------------------------------------------
+    <br/>
+    For error codes and descriptions see &lt;Error Message&gt;.
+        </td>
+      </tr>
+    </table>
+    <h2>References</h2>
+    <p class="body">
+      <a href="ClassConfiguration%20Functions.html">Configuration Functions</a><br/>
+      <a href="Thorlabs%20DFM%20Driver%20Extension.html">Thorlabs DFM Driver Extension</a><br/>
+      <a href="Alphabetical%20Function%20Index.html">Alphabetical Function Index</a><br/>
+      <a href="Hierarchical%20Function%20Index.html">Hierarchical Function Index</a><br/>
+    </p>
+  </body>
+</html>

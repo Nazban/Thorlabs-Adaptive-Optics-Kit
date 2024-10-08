@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <link rel="stylesheet" href="htmlhelp.css" type="text/css">
+    <title>TLDFMX_get_system_parameters</title>
+  </head>
+  <body>
+    <h1>TLDFMX_get_system_parameters</h1>
+    <p class="syntax">
+      ViStatus TLDFMX_get_system_parameters (ViSession instrumentHandle,
+                                       TLDFMX_rotation_t *rotationMode,
+                                       TLDFMX_flip_t *flipMode,
+                                       ViReal64 _VI_FAR maxDeviceZernikeAmplitudes[],
+                                       ViPBoolean isDataValid);
+    </p>
+    <h2 class="purpose">Purpose</h2>
+    <p class="body">
+    This function returns parameters of the optical setup measured by the function TLDFMX_measure_system_parameters.
+    <br/>
+    Determined parameters are
+    <br/>
+    - the required rotation and flip option for the Zernike pattern
+    <br/>
+    - the maximum achievable Zernike amplitudes.
+    <br/>
+    Note:
+    <br/>
+    (1) A successful run of function TLDFMX_measure_system_parameters is a precondition to get the measured data out herewith.
+    <br/>
+    (2) You need to call functions TLDFMX_set_rotation_mode and TLDFMX_set_flip_mode in order to set the required options active.
+    </p>
+    <h2>Parameters</h2>
+    <table class="borderless" summary="Parameter help">
+      <tr>
+        <td valign="top"><em class="label">Input</em></td>
+      </tr>
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">instrumentHandle</td>
+        <td class="paramDataType">ViSession</td>
+        <td>
+    This parameter accepts the Instrument Handle returned by the Initialize function to select the desired instrument driver session.
+        </td>
+      </tr>
+      <tr>
+        <td valign="top"><em class="label">Output</em></td>
+      </tr>
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">rotationMode</td>
+        <td class="paramDataType">TLDFMX_rotation_t (passed by reference)</td>
+        <td>
+    This parameter returns the required rotation mode for the Zernike pattern generation.
+    <br/>
+    Note:
+    <br/>
+    You need to call functions TLDFMX_set_rotation_mode in order to set the required option active.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">flipMode</td>
+        <td class="paramDataType">TLDFMX_flip_t (passed by reference)</td>
+        <td>
+    This parameter returns the required flip mode for the Zernike pattern generation.
+    <br/>
+    Note:
+    <br/>
+    You need to call functions TLDFMX_set_flip_mode in order to set the required option active.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">maxDeviceZernikeAmplitudes</td>
+        <td class="paramDataType">ViReal64[]</td>
+        <td>
+    This parameter returns an array of Zernike amplitudes which are achievable by the DMP40 within the optical setup. The unit equals the unit of the Wavefront Sensor data feed into function TLDFMX_measure_system_parameters. By default this is microns.
+    <br/>
+    The measured amplitude denotes the entire range so that minimum and maximum amplitudes are +/- the half range.
+    <br/>
+    e.g.
+    <br/>
+    amplitude_range = 5.2
+    <br/>
+    amplitude_min = -amplitude_range / 2.0;
+    <br/>
+    amplitude_max =&nbsp;&nbsp;amplitude_range / 2.0;
+    <br/>
+    Note:
+    <br/>
+    (1) The required array size can be queried by function TLDFMX_get_parameters, parameter 'Maximum Zernike Count'.
+    <br/>
+    (2) The array is zero based, that is index [0] denotes the Z4 amplitude and index [11] the Z15 amplitude.
+    <br/>
+    (3) The measured amplitudes depend on the magnification of the optical setup.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">isDataValid</td>
+        <td class="paramDataType">ViBoolean (passed by reference)</td>
+        <td>
+    This parameter returns if there are valid measured system parameters.
+        </td>
+      </tr>
+    </table>
+    <h2>Return Value</h2>
+    <table class="borderless" summary="Return value help">
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">status</td>
+        <td class="paramDataType">ViStatus</td>
+        <td>
+    Operational return status. Contains either a completion code or an error code. Instrument driver specific codes that may be returned in addition to the VISA error codes defined in VPP-4.3 and vendor specific codes, are as follows.
+    <br/>
+    Completition Codes
+    <br/>
+    ----------------------------------------------------------------
+    <br/>
+    VI_SUCCESS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Close successful
+    <br/>
+    Vendor Specific Codes
+    <br/>
+    ----------------------------------------------------------------
+    <br/>
+    For error codes and descriptions see &lt;Error Message&gt;.
+        </td>
+      </tr>
+    </table>
+    <h2>References</h2>
+    <p class="body">
+      <a href="ClassData%20Functions.html">Data Functions</a><br/>
+      <a href="Thorlabs%20DFM%20Driver%20Extension.html">Thorlabs DFM Driver Extension</a><br/>
+      <a href="Alphabetical%20Function%20Index.html">Alphabetical Function Index</a><br/>
+      <a href="Hierarchical%20Function%20Index.html">Hierarchical Function Index</a><br/>
+    </p>
+  </body>
+</html>

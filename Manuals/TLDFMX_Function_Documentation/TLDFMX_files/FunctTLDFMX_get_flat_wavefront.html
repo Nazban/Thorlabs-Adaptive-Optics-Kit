@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <link rel="stylesheet" href="htmlhelp.css" type="text/css">
+    <title>TLDFMX_get_flat_wavefront</title>
+  </head>
+  <body>
+    <h1>TLDFMX_get_flat_wavefront</h1>
+    <p class="syntax">
+      ViStatus TLDFMX_get_flat_wavefront (ViSession instrumentHandle,
+                                    ViUInt32 zernikes,
+                                    ViReal32 _VI_FAR measuredZernikeAmplitudes[],
+                                    ViReal64 _VI_FAR deviceZernikeAmplitudes[],
+                                    ViReal64 _VI_FAR voltagePattern[]);
+    </p>
+    <h2 class="purpose">Purpose</h2>
+    <p class="body">
+    This function is used to perform a single control step within an adaptive optical loop by using the feedback from a Wavefront Sensor. The target is to flatten the wavefront by minimizing the measured Zernike amplitudes Z4 to Z15.
+    <br/>
+    The function calculates updated relative Zernike amplitudes related to the Deformable Mirror and the corresponding voltage pattern in order to compensate for the measured absolute Zernike amplitudes measured by the Wavefront Sensor.
+    <br/>
+    Note:
+    <br/>
+    (1) A successful run of function TLDFMX_measure_system_parameters is a precondition to run this function.
+    <br/>
+    (2) This function just calculates and returns mirror pattern which have to be set separately to the physical device by using TLDFM base driver functions like TLDFM_set_segment_voltages.
+    <br/>
+    (3) For a permanent operation of the control loop you need to repeatedly call this function.
+    <br/>
+    (4) Be sure you have the optical setup properly aligned and the beams are centered to the device apertures.
+    <br/>
+    (5) The pupil of the DMP40 (10 mm diameter) needs to be adapted to the pupil of the Wavefront Sensor by using optical lenses, mirrors or similar means.
+    <br/>
+    (6) You may need to program a short pause (for instance 5 ms) between setting the voltage pattern to the device and requesting a new measurement result from the Wavefront Sensor in order to allow the DMP40 electronics and mechanics to settle.
+    <br/>
+    (7) Be sure to trigger a new Wavefront Sensor measurement and do not use old camera images taken before the new pattern was applied.
+    </p>
+    <h2>Parameters</h2>
+    <table class="borderless" summary="Parameter help">
+      <tr>
+        <td valign="top"><em class="label">Input</em></td>
+      </tr>
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">instrumentHandle</td>
+        <td class="paramDataType">ViSession</td>
+        <td>
+    This parameter accepts the Instrument Handle returned by the Initialize function to select the desired instrument driver session.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">zernikes</td>
+        <td class="paramDataType">ViUInt32</td>
+        <td>
+    This parameter determines the Zernike terms which should be handled by the control step. It accepts a bitfield of type TLDFMX_zernike_flag_t.
+    <br/>
+    Available bitfields:
+    <br/>
+    Z_Ast45_Flag = 0x00000001, // Z4&nbsp;&nbsp;&nbsp;
+    <br/>
+    Z_Def_Flag&nbsp;&nbsp;&nbsp;= 0x00000002, // Z5&nbsp;&nbsp;&nbsp;
+    <br/>
+    Z_Ast0_Flag&nbsp;&nbsp;= 0x00000004, // Z6&nbsp;&nbsp;&nbsp;
+    <br/>
+    Z_TreY_Flag&nbsp;&nbsp;= 0x00000008, // Z7&nbsp;&nbsp;&nbsp;
+    <br/>
+    Z_ComX_Flag&nbsp;&nbsp;= 0x00000010, // Z8&nbsp;&nbsp;&nbsp;
+    <br/>
+    Z_ComY_Flag&nbsp;&nbsp;= 0x00000020, // Z9&nbsp;&nbsp;&nbsp;
+    <br/>
+    Z_TreX_Flag&nbsp;&nbsp;= 0x00000040, // Z10&nbsp;&nbsp;
+    <br/>
+    Z_TetY_Flag&nbsp;&nbsp;= 0x00000080, // Z11&nbsp;&nbsp;
+    <br/>
+    Z_SAstY_Flag = 0x00000100, // Z12&nbsp;&nbsp;
+    <br/>
+    Z_SAb3_Flag&nbsp;&nbsp;= 0x00000200, // Z13&nbsp;&nbsp;
+    <br/>
+    Z_SAstX_Flag = 0x00000400, // Z14&nbsp;&nbsp;
+    <br/>
+    Z_TetX_Flag&nbsp;&nbsp;= 0x00000800, // Z15&nbsp;&nbsp;
+    <br/>
+    Z_None_Flag&nbsp;&nbsp;= 0x00000000, // no Zernike
+    <br/>
+    Z_All_Flag&nbsp;&nbsp;&nbsp;= 0xFFFFFFFF&nbsp;&nbsp;// all Zernike Z4 to Z15
+    <br/>
+    Any combination of single bits can be selected by logical 'or' statements.
+    <br/>
+    e.g. Z_Ast45_Flag | Z_Def_Flag | Z_Ast0_Flag // selects Z4, Z5 and Z6
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">measuredZernikeAmplitudes</td>
+        <td class="paramDataType">ViReal32[]</td>
+        <td>
+    This parameter accepts an array of Zernike amplitudes measured by a Wavefront Sensor.
+    <br/>
+    Note:
+    <br/>
+    The array needs to contain at least 16 ViReal32 (float) elements. Meaningful indices range from [4] for Z4 to [15] for Z15.
+        </td>
+      </tr>
+      <tr>
+        <td valign="top"><em class="label">Output</em></td>
+      </tr>
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">deviceZernikeAmplitudes</td>
+        <td class="paramDataType">ViReal64[]</td>
+        <td>
+    This parameter returns an array of relative Zernike amplitudes (-1.0 to +1.0, related to the Deformable Mirror), as a result of the performed regulation step.
+    <br/>
+    Only the values of those Zernike terms selected by the bitfield of parameter 'Zernikes' are changed due to the regulation step, all other remain unchanged.
+    <br/>
+    These Zernike amplitudes correspond to the voltage pattern returned in parameter 'Voltage Pattern' (also function TLDFMX_calculate_zernike_pattern can be used for conversion).
+    <br/>
+    Note:
+    <br/>
+    (1) The array needs to contain at least TLDFMX_MAX_ZERNIKE_TERMS (12) ViReal64 (double) elements. Meaningful (zero-based) indices range from
+    <br/>
+    [TLDFMX_Z4_AMPL_POS] or [0] for Z4 to
+    <br/>
+    [TLDFMX_Z15_AMPL_POS] or [11] for Z15.
+    <br/>
+    (2) To define initial Zernike amplitudes prior to start the control loop use function TLDFMX_calculate_zernike_pattern, parameter 'Zernike Amplitudes'.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">voltagePattern</td>
+        <td class="paramDataType">ViReal64[]</td>
+        <td>
+    This parameter returns an array of segment voltages which is able to flatten the wavefront as soon it is applied to the DMP40.
+    <br/>
+    This voltage pattern corresponds to the updated 'Device Zernike Amplitudes' during the regulation step and can also be achieved by calling TLDFMX_get_zernike_pattern with 'Device Zernike Amplitudes' as input and all 'Zernikes' selected.
+    <br/>
+    Note:
+    <br/>
+    (1) The returned voltage pattern have to be set separately to the physical device by using TLDFM base driver functions like TLDFM_set_segment_voltages.
+    <br/>
+    (2) This pattern is already limited to the allowed voltage range if range check is enabled by function TLDFMX_set_pattern_range_check. Range check is enabled by default.
+    <br/>
+    (3) You may need to program a short pause (for instance 5 ms) between setting the voltage pattern to the device and requesting a new measurement result from the Wavefront Sensor in order to allow the DMP40 electronics and mechanics to settle.
+    <br/>
+    (4) Be sure to trigger a new Wavefront Sensor measurement and do not use old camera images taken before the new test pattern was applied.
+        </td>
+      </tr>
+    </table>
+    <h2>Return Value</h2>
+    <table class="borderless" summary="Return value help">
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">status</td>
+        <td class="paramDataType">ViStatus</td>
+        <td>
+    Operational return status. Contains either a completion code or an error code. Instrument driver specific codes that may be returned in addition to the VISA error codes defined in VPP-4.3 and vendor specific codes, are as follows.
+    <br/>
+    Completition Codes
+    <br/>
+    ----------------------------------------------------------------
+    <br/>
+    VI_SUCCESS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <br/>
+    Vendor Specific Codes
+    <br/>
+    ----------------------------------------------------------------
+    <br/>
+    For error codes and descriptions see &lt;Error Message&gt;.
+        </td>
+      </tr>
+    </table>
+    <h2>References</h2>
+    <p class="body">
+      <a href="ClassAction,Status%20Functions.html">Action/Status Functions</a><br/>
+      <a href="Thorlabs%20DFM%20Driver%20Extension.html">Thorlabs DFM Driver Extension</a><br/>
+      <a href="Alphabetical%20Function%20Index.html">Alphabetical Function Index</a><br/>
+      <a href="Hierarchical%20Function%20Index.html">Hierarchical Function Index</a><br/>
+    </p>
+  </body>
+</html>

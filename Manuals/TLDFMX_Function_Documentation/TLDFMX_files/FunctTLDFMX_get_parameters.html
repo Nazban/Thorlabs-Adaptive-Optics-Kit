@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <link rel="stylesheet" href="htmlhelp.css" type="text/css">
+    <title>TLDFMX_get_parameters</title>
+  </head>
+  <body>
+    <h1>TLDFMX_get_parameters</h1>
+    <p class="syntax">
+      ViStatus TLDFMX_get_parameters (ViSession instrumentHandle,
+                                ViPReal64 minimumZernikeAmplitude,
+                                ViPReal64 maximumZernikeAmplitude,
+                                ViPInt32 maximumZernikeCount,
+                                int *measurementSteps, int *relaxSteps);
+    </p>
+    <h2 class="purpose">Purpose</h2>
+    <p class="body">
+    This function returns important parameters for using TLDFMX driver functions.
+    </p>
+    <h2>Parameters</h2>
+    <table class="borderless" summary="Parameter help">
+      <tr>
+        <td valign="top"><em class="label">Input</em></td>
+      </tr>
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">instrumentHandle</td>
+        <td class="paramDataType">ViSession</td>
+        <td>
+    This parameter accepts the Instrument Handle returned by the Initialize function to select the desired instrument driver session.
+        </td>
+      </tr>
+      <tr>
+        <td valign="top"><em class="label">Output</em></td>
+      </tr>
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">minimumZernikeAmplitude</td>
+        <td class="paramDataType">ViReal64 (passed by reference)</td>
+        <td>
+    This parameter returns the minimum adjustable Zernike amplitude on a relative scale.
+    <br/>
+    Default: -1.0
+    <br/>
+    Note: You may pass VI_NULL if this information is not required.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">maximumZernikeAmplitude</td>
+        <td class="paramDataType">ViReal64 (passed by reference)</td>
+        <td>
+    This parameter returns the maximum adjustable Zernike amplitude on a relative scale.
+    <br/>
+    Default: +1.0
+    <br/>
+    Note: You may pass VI_NULL if this information is not required.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">maximumZernikeCount</td>
+        <td class="paramDataType">ViInt32 (passed by reference)</td>
+        <td>
+    This parameter returns the number of adjustable Zernike amplitudes. This also determines the minimum size of Zernike amplitude arrays.
+    <br/>
+    Default: 12
+    <br/>
+    Note:
+    <br/>
+    (1) Zernike amplitude arrays range from index [0] for Z4 to index [11] for Z15.
+    <br/>
+    (2) You may pass VI_NULL if this information is not required.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">measurementSteps</td>
+        <td class="paramDataType">int (passed by reference)</td>
+        <td>
+    This parameter returns the necessary step count for measuring the optical system parameters in function TLDFMX_measure_system_parameters.
+    <br/>
+    Default: 33
+    <br/>
+    Note: You may pass VI_NULL if this information is not required.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">relaxSteps</td>
+        <td class="paramDataType">int (passed by reference)</td>
+        <td>
+    This parameter returns the necessary step count for relaxing the mirror in function TLDFMX_relax.
+    <br/>
+    Default: 80
+    <br/>
+    Note: You may pass VI_NULL if this information is not required.
+        </td>
+      </tr>
+    </table>
+    <h2>Return Value</h2>
+    <table class="borderless" summary="Return value help">
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">status</td>
+        <td class="paramDataType">ViStatus</td>
+        <td>
+    Operational return status. Contains either a completion code or an error code. Instrument driver specific codes that may be returned in addition to the VISA error codes defined in VPP-4.3 and vendor specific codes, are as follows.
+    <br/>
+    Completition Codes
+    <br/>
+    ----------------------------------------------------------------
+    <br/>
+    VI_SUCCESS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get successful
+    <br/>
+    Vendor Specific Codes
+    <br/>
+    ----------------------------------------------------------------
+    <br/>
+    For error codes and descriptions see &lt;Error Message&gt;.
+        </td>
+      </tr>
+    </table>
+    <h2>References</h2>
+    <p class="body">
+      <a href="ClassData%20Functions.html">Data Functions</a><br/>
+      <a href="Thorlabs%20DFM%20Driver%20Extension.html">Thorlabs DFM Driver Extension</a><br/>
+      <a href="Alphabetical%20Function%20Index.html">Alphabetical Function Index</a><br/>
+      <a href="Hierarchical%20Function%20Index.html">Hierarchical Function Index</a><br/>
+    </p>
+  </body>
+</html>

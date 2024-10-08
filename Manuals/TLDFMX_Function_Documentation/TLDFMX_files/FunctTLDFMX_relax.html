@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <link rel="stylesheet" href="htmlhelp.css" type="text/css">
+    <title>TLDFMX_relax</title>
+  </head>
+  <body>
+    <h1>TLDFMX_relax</h1>
+    <p class="syntax">
+      ViStatus TLDFMX_relax (ViSession instrumentHandle, ViUInt32 devicePart,
+                       ViBoolean isFirstStep, ViBoolean reload,
+                       ViReal64 _VI_FAR relaxPatternMirror[],
+                       ViReal64 _VI_FAR relaxPatternArms[],
+                       ViPInt32 remainingSteps);
+    </p>
+    <h2 class="purpose">Purpose</h2>
+    <p class="body">
+    This function calculates neccessary relax patterns for the specified piezo parts of the Deformable Mirror.
+    <br/>
+    The function needs to be called repeatedly within a loop until the 'Remaining Steps' parameter returns 0.
+    <br/>
+    Each returned segment or arm pattern have to be set separately to the physical device by using TLDFM base driver functions like TLDFM_set_segment_voltages, TLDFM_set_tilt_voltages or TLDFM_set_voltages.
+    <br/>
+    The relax function will minimize piezo drift in order to get a more stable mirror surface.
+    </p>
+    <h2>Parameters</h2>
+    <table class="borderless" summary="Parameter help">
+      <tr>
+        <td valign="top"><em class="label">Input</em></td>
+      </tr>
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">instrumentHandle</td>
+        <td class="paramDataType">ViSession</td>
+        <td>
+    This parameter accepts the Instrument Handle returned by the Initialize function to select the desired instrument driver session.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">devicePart</td>
+        <td class="paramDataType">ViUInt32</td>
+        <td>
+    This parameter determines the target part to be relaxed.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">isFirstStep</td>
+        <td class="paramDataType">ViBoolean</td>
+        <td>
+    Set 'Is First Step' to 'VI_TRUE' for the first relax step and to&nbsp;&nbsp;'VI_FALSE' for all following steps.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">reload</td>
+        <td class="paramDataType">ViBoolean</td>
+        <td>
+    If VI_TRUE the function will calculate patterns symmetric to the actual voltage. The last step will return the voltage pattern prior relaxing again.
+    <br/>
+    If VI_FALSE each piezo of the device part will be relaxed to 100V.
+    <br/>
+    Note: The initial relax amplitude for each segment or tilt arm may be different because the maximum available symmetric voltage range depends on its actual voltage.
+    <br/>
+    For instance, the initial relax amplitude of a segment having 150 V is 50V, allowing a symmetric relaxing between 100V and 200V.
+    <br/>
+    Call function TLDFM_get_device_configuration to get the valid voltage range.
+        </td>
+      </tr>
+      <tr>
+        <td valign="top"><em class="label">Output</em></td>
+      </tr>
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">relaxPatternMirror</td>
+        <td class="paramDataType">ViReal64[]</td>
+        <td>
+    Returns the Mirror Pattern to be set by caller using base driver functions like TLDFM_set_segment_voltages.
+    <br/>
+    If 'Arms' is selected as 'Device Part' only you may pass VI_NULL.
+    <br/>
+    Note:
+    <br/>
+    This pattern is already limited to the allowed voltage range.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">relaxPatternArms</td>
+        <td class="paramDataType">ViReal64[]</td>
+        <td>
+    Returns the Arms Pattern to be set by caller using base driver functions like TLDFM_set_tilt_voltages.
+    <br/>
+    If 'Mirror' is selected as 'Device Part' only you may pass VI_NULL.
+    <br/>
+    Note:
+    <br/>
+    This pattern is already limited to the allowed voltage range.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">remainingSteps</td>
+        <td class="paramDataType">ViInt32 (passed by reference)</td>
+        <td>
+    Returns a number how often the function have to be called again.
+    <br/>
+    Note: If remaining steps equals 0 the function don't have to be called again.
+        </td>
+      </tr>
+    </table>
+    <h2>Return Value</h2>
+    <table class="borderless" summary="Return value help">
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">status</td>
+        <td class="paramDataType">ViStatus</td>
+        <td>
+    Operational return status. Contains either a completion code or an error code. Instrument driver specific codes that may be returned in addition to the VISA error codes defined in VPP-4.3 and vendor specific codes, are as follows.
+    <br/>
+    Completition Codes
+    <br/>
+    ----------------------------------------------------------------
+    <br/>
+    VI_SUCCESS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Close successful
+    <br/>
+    Vendor Specific Codes
+    <br/>
+    ----------------------------------------------------------------
+    <br/>
+    For error codes and descriptions see &lt;Error Message&gt;.
+        </td>
+      </tr>
+    </table>
+    <h2>References</h2>
+    <p class="body">
+      <a href="ClassAction,Status%20Functions.html">Action/Status Functions</a><br/>
+      <a href="Thorlabs%20DFM%20Driver%20Extension.html">Thorlabs DFM Driver Extension</a><br/>
+      <a href="Alphabetical%20Function%20Index.html">Alphabetical Function Index</a><br/>
+      <a href="Hierarchical%20Function%20Index.html">Hierarchical Function Index</a><br/>
+    </p>
+  </body>
+</html>

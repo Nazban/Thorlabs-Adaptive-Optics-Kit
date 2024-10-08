@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <link rel="stylesheet" href="htmlhelp.css" type="text/css">
+    <title>TLDFM_get_device_information</title>
+  </head>
+  <body>
+    <h1>TLDFM_get_device_information</h1>
+    <p class="syntax">
+      ViStatus TLDFM_get_device_information (ViSession instrumentHandle,
+                                       ViUInt32 deviceIndex,
+                                       ViChar _VI_FAR manufacturer[],
+                                       ViChar _VI_FAR instrumentName[],
+                                       ViChar _VI_FAR serialNumber[],
+                                       ViPBoolean deviceAvailable,
+                                       ViChar _VI_FAR resourceName[]);
+    </p>
+    <h2 class="purpose">Purpose</h2>
+    <p class="body">
+    Get identification information of a connected device.
+    <br/>
+    You don't have to open a session with the device with TLDFM_init() before you can use this function.
+    </p>
+    <h2>Parameters</h2>
+    <table class="borderless" summary="Parameter help">
+      <tr>
+        <td valign="top"><em class="label">Input</em></td>
+      </tr>
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">instrumentHandle</td>
+        <td class="paramDataType">ViSession</td>
+        <td>
+    This parameter is needed for IVI compliance. Set to VI_NULL.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">deviceIndex</td>
+        <td class="paramDataType">ViUInt32</td>
+        <td>
+    The device's index. Valid values range from 0 to (number of connected devices - 1) (see TLDFM_get_device_count()).
+        </td>
+      </tr>
+      <tr>
+        <td valign="top"><em class="label">Output</em></td>
+      </tr>
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">manufacturer</td>
+        <td class="paramDataType">ViChar[]</td>
+        <td>
+    A TLDFM_BUFFER_SIZE (256) byte string buffer to receive the manufacturer name. You may pass VI_NULL if you don't need this value.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">instrumentName</td>
+        <td class="paramDataType">ViChar[]</td>
+        <td>
+    A TLDFM_MAX_INSTR_NAME_LENGTH (28) byte string buffer to receive the instrument/model name. You may pass VI_NULL if you don't need this value.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">serialNumber</td>
+        <td class="paramDataType">ViChar[]</td>
+        <td>
+    A TLDFM_MAX_SN_LENGTH (28) byte string buffer to receive the serial number. You may pass VI_NULL if you don't need this value.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">deviceAvailable</td>
+        <td class="paramDataType">ViBoolean (passed by reference)</td>
+        <td>
+    Returns VI_TRUE if the device is available (not used by another program) or VI_FALSE.
+    <br/>
+    You may pass VI_NULL if you don't need this value.
+        </td>
+      </tr>
+      <tr>
+        <td class="paramName">resourceName</td>
+        <td class="paramDataType">ViChar[]</td>
+        <td>
+    A VI_FIND_BUFLEN (256) byte string buffer to receive the ressource identification string. Use this string in function TLDFM_init().
+    <br/>
+    You may pass VI_NULL if you don't need this value.
+        </td>
+      </tr>
+    </table>
+    <h2>Return Value</h2>
+    <table class="borderless" summary="Return value help">
+      <tr>
+        <td class="tablehead">Name</td>
+        <td class="tablehead">Type</td>
+        <td class="tablehead">Description</td>
+      </tr>
+      <tr>
+        <td class="paramName">status</td>
+        <td class="paramDataType">ViStatus</td>
+        <td>
+    Operational return status. Contains either a completion code or an error code. Instrument driver specific codes that may be returned in addition to the VISA error codes defined in VPP-4.3 and vendor specific codes, are as follows.
+    <br/>
+    Completition Codes
+    <br/>
+    ----------------------------------------------------------------
+    <br/>
+    VI_SUCCESS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Initialization successful
+    <br/>
+    Vendor Specific Codes
+    <br/>
+    ----------------------------------------------------------------
+    <br/>
+    For error codes and descriptions see &lt;Error Message&gt;.
+        </td>
+      </tr>
+    </table>
+    <h2>References</h2>
+    <p class="body">
+      <a href="ClassResource%20Functions.html">Resource Functions</a><br/>
+      <a href="Thorlabs%20DFM%20Visa%20Instrument%20Driver.html">Thorlabs DFM Visa Instrument Driver</a><br/>
+      <a href="Alphabetical%20Function%20Index.html">Alphabetical Function Index</a><br/>
+      <a href="Hierarchical%20Function%20Index.html">Hierarchical Function Index</a><br/>
+    </p>
+  </body>
+</html>
